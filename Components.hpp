@@ -58,12 +58,12 @@ class CLifespan
 {
 public:
   // FTL - Frames To Live
-  size_t initialFrames   { 0 };  // initial FTL
-  size_t remainingFrames { 0 };  // remaining FTL
+  size_t initialFTL   { 0 };
+  size_t remainingFTL { 0 };
 
   CLifespan(size_t framesToLive)
-    : initialFrames(framesToLive)
-    , remainingFrames(framesToLive)
+    : initialFTL(framesToLive)
+    , remainingFTL(framesToLive)
   {}
 };
 
