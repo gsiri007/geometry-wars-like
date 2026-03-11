@@ -28,7 +28,7 @@ const size_t EntityManager::getTotalEntities() const
 void EntityManager::update()
 {
 
-  for (auto & e : m_buffer)
+  for (const auto & e : m_buffer)
   {
     m_entities.push_back(e);
     m_entityMap[e->m_tag].push_back(e);
@@ -40,7 +40,7 @@ void EntityManager::update()
 
   for (auto & pair : m_entityMap)
   {
-    std::erase_if(pair.second
-                , [] (const std::shared_ptr<Entity> & e) { return !(e->m_alive); });
+    std::erase_if( pair.second
+                 , [] (const std::shared_ptr<Entity> & e) { return !(e->m_alive); });
   }
 };
