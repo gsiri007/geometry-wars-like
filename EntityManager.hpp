@@ -18,11 +18,10 @@ class EntityManager
 public:
   EntityManager();
 
-  const  size_t        addEntity(Tag tag);
-  const  EntityVec &   getEntities()         const;
-  const  EntityVec &   getEntities(Tag tag)  const;
-  const  size_t        getTotalEntities()    const;
-         void          toggleEntityAlive(size_t id);
+  std::shared_ptr<Entity> addEntity(Tag tag);
+  EntityVec &   getEntities();
+  EntityVec &   getEntities(Tag tag);
+  const size_t  getTotalEntities() const;
 
   void update();
 };
