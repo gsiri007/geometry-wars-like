@@ -1,7 +1,7 @@
 #include "EntityManager.hpp"
 #include <memory>
 
-std:: shared_ptr<Entity> EntityManager::addEntity(Tag tag)
+std::shared_ptr<Entity> EntityManager::addEntity(Tag tag)
 {
   auto id { m_nextID++ };
   auto e { std::shared_ptr<Entity>(new Entity(id, tag)) };
