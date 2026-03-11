@@ -36,11 +36,11 @@ void EntityManager::update()
   }
 
   std::erase_if( m_entities
-               , [] (std::shared_ptr<Entity> e) { return !(e->m_alive); });
+               , [] (const std::shared_ptr<Entity> & e) { return !(e->m_alive); });
 
   for (auto & pair : m_entityMap)
   {
     std::erase_if(pair.second
-                , [] (std::shared_ptr<Entity> e) { return !(e->m_alive); });
+                , [] (const std::shared_ptr<Entity> & e) { return !(e->m_alive); });
   }
 };
