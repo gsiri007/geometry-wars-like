@@ -35,12 +35,12 @@ void EntityManager::update()
     m_totalEntities++;
   }
 
-  for (auto & e : m_entities)
-  {
-    if (e->m_alive == false)
-    {
-      //TODO: remove the entity from m_entities and m_entityMap
-    }
-  }
+  std::erase_if( m_entities
+               , [] (std::shared_ptr<Entity> e) { return !(e->m_alive); });
 
+  for (auto & pair : m_entityMap)
+  {
+    std::erase_if(pair.second
+                , [] (std::shared_ptr<Entity> e) { return !(e->m_alive); });
+  }
 };
