@@ -1,8 +1,10 @@
 #include "Game.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/System/Angle.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Window.hpp>
 #include <cstdlib>
 #include <fstream>
@@ -53,7 +55,6 @@ void Game::init(const std::string & config)
 
     if (entry == "Player")
     {
-      // Player SR CR S FR FG FB OR OG OB OT V
       configFile
        >> m_playerConfig.SR
        >> m_playerConfig.CR
@@ -108,8 +109,8 @@ void Game::spawnPlayer()
   auto size = m_window.getSize();
   m_player->cTransform = std::make_shared<CTransform>(CTransform(
           Vec2(size.x / 2.0f, size.y / 2.0f)
-        , Vec2(0, 0)
-        , 0));
+        , Vec2(m_playerConfig.S, m_playerConfig.S)
+        , 8));
 
   m_player->cInput = std::make_shared<CInput>();
 }
@@ -130,7 +131,34 @@ void Game::spawnSpecialWeapon()
 }
 
 
-void Game::sMovement() {};
+void Game::sMovement()
+{
+  for (auto & e : m_entities.getEntities())
+  {
+
+    if (e->cInput)
+    {
+      if (e->cInput->up)
+      {
+        e->cTransform->position.y -= e->cTransform->velocity.y;
+      }
+
+      if (e->cInput->down)
+      {
+        e->cTransform->position.y += e->cTransform->velocity.y;
+      }
+
+      if (e->cInput->left)
+      {
+        e->cTransform->position.x -= e->cTransform->velocity.x;
+      }
+
+      if (e->cInput->right) {
+        e->cTransform->position.x += e->cTransform->velocity.x;
+      }
+    }
+  }
+};
 
 void Game::sUserInput()
 {
@@ -140,7 +168,50 @@ void Game::sUserInput()
     {
       m_running = false;
     }
+
+    if (const auto & keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+
+      switch (keyPressed->scancode)
+      {
+        case sf::Keyboard::Scancode::W :
+          m_player->cInput->up = true;
+          break;
+        case sf::Keyboard::Scancode::A :
+          m_player->cInput->left = true;
+          break;
+        case sf::Keyboard::Scancode::S :
+          m_player->cInput->down = true;
+          break;
+        case sf::Keyboard::Scancode::D :
+          m_player->cInput->right = true;
+          break;
+        default:
+          break;
+      }
+    }
+
+    if (const auto & keyReleased = event->getIf<sf::Event::KeyReleased>())
+    {
+      switch (keyReleased->scancode)
+      {
+        case sf::Keyboard::Scancode::W :
+          m_player->cInput->up = false;
+          break;
+        case sf::Keyboard::Scancode::A :
+          m_player->cInput->left = false;
+          break;
+        case sf::Keyboard::Scancode::S :
+          m_player->cInput->down = false;
+          break;
+        case sf::Keyboard::Scancode::D :
+          m_player->cInput->right = false;
+          break;
+        default:
+          break;
+      }
+    }
   }
+
 };
 
 void Game::sLifespan() {};
@@ -155,12 +226,16 @@ void Game::sRender()
         , e->cTransform->position.y
     });
 
+    e->cShape->circle.setRotation(sf::degrees(
+          e->cTransform->angle));
+
     m_window.draw(e->cShape->circle);
   }
 
   m_window.display();
 
 };
+
 void Game::sEnemySpawner() {};
 void Game::sCollision() {};
 
