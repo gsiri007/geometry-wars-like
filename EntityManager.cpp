@@ -37,6 +37,8 @@ void EntityManager::update()
     m_totalEntities++;
   }
 
+  m_buffer.clear();
+
   std::erase_if( m_entities
                , [] (const std::shared_ptr<Entity> & e) { return !(e->m_alive); });
 
