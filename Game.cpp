@@ -1,16 +1,11 @@
 #include "Game.hpp"
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/System/Angle.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
-#include <SFML/Window/Window.hpp>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <memory>
-#include <optional>
 #include <string>
 
 
@@ -136,6 +131,7 @@ void Game::sMovement()
   for (auto & e : m_entities.getEntities())
   {
 
+    // user controlled entity (player)
     if (e->cInput)
     {
       if (e->cInput->up)
@@ -157,6 +153,9 @@ void Game::sMovement()
         e->cTransform->position.x += e->cTransform->velocity.x;
       }
     }
+
+    // other moving entities (enemies)
+    //TODO:
   }
 };
 
@@ -169,7 +168,8 @@ void Game::sUserInput()
       m_running = false;
     }
 
-    if (const auto & keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+    if (const auto & keyPressed = event->getIf<sf::Event::KeyPressed>())
+    {
 
       switch (keyPressed->scancode)
       {
@@ -220,7 +220,8 @@ void Game::sRender()
 {
   m_window.clear({0, 0, 0, 255});
 
-  for (auto & e : m_entities.getEntities()) {
+  for (auto & e : m_entities.getEntities())
+  {
     e->cShape->circle.setPosition({
           e->cTransform->position.x
         , e->cTransform->position.y
