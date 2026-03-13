@@ -1,6 +1,5 @@
 #include "Game.hpp"
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Color.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <cstddef>
@@ -117,6 +116,7 @@ void Game::run()
 void Game::spawnPlayer()
 {
   m_player = m_entities.addEntity(Tag::Player);
+
   m_player->cShape = std::make_shared<CShape>(CShape(
           m_playerConfig.SR
         , m_playerConfig.V
@@ -125,6 +125,7 @@ void Game::spawnPlayer()
         , m_playerConfig.OT));
 
   auto windowSize = m_window.getSize();
+
   m_player->cTransform = std::make_shared<CTransform>(CTransform(
           Vec2(windowSize.x / 2.0f, windowSize.y / 2.0f)
         , Vec2(m_playerConfig.S, m_playerConfig.S)
@@ -137,7 +138,7 @@ void Game::spawnEnemy()
 {
   auto enemy { m_entities.addEntity(Tag::Enemy) };
 
-  auto vertices  { getRandomNumber(m_enemyConfig.VMIN, m_enemyConfig.VMAX )};
+  auto vertices  { getRandomNumber(m_enemyConfig.VMIN, m_enemyConfig.VMAX) };
 
   std::map<size_t, sf::Color> colorMap {
       { 0, sf::Color(255, 0, 0, 255) }
@@ -148,14 +149,13 @@ void Game::spawnEnemy()
   auto  colorKey  { getRandomNumber(0, 2) };
   auto  color     { colorMap[colorKey] };
 
-  // TODO: implement bound checking to ensure enemy spawn within the window
   auto posX  { getRandomNumber( m_enemyConfig.SR
-                              , m_window.getSize().x - m_enemyConfig.SR) };
+                              , m_window.getSize().x - m_enemyConfig.SR ) };
   auto posY  { getRandomNumber( m_enemyConfig.SR
-                              , m_window.getSize().y - m_enemyConfig.SR) };
+                              , m_window.getSize().y - m_enemyConfig.SR ) };
 
-  auto speedX  { getRandomNumber( m_enemyConfig.SMIN, m_enemyConfig.SMAX) };
-  auto speedY  { getRandomNumber( m_enemyConfig.SMIN, m_enemyConfig.SMAX) };
+  auto speedX  { getRandomNumber(m_enemyConfig.SMIN, m_enemyConfig.SMAX) };
+  auto speedY  { getRandomNumber(m_enemyConfig.SMIN, m_enemyConfig.SMAX) };
 
   enemy->cShape = std::make_shared<CShape>(CShape(
           m_enemyConfig.SR
@@ -183,7 +183,7 @@ void Game::spawnSpecialWeapon()
 int Game::getRandomNumber(const int min, const int max)
 {
   std::srand(std::time(nullptr));
-  int randomNumber { std::rand() % (max - min + 1) };
+  int randomNumber { ( std::rand() % (max - min + 1) ) + min };
   return randomNumber;
 }
 
