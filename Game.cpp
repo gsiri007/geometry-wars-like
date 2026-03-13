@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <cstdlib>
@@ -63,6 +64,23 @@ void Game::init(const std::string & config)
        >> m_playerConfig.OT
        >> m_playerConfig.V;
     }
+
+    if (entry == "Enemy")
+    {
+      configFile
+       >> m_enemyConfig.SR
+       >> m_enemyConfig.CR
+       >> m_enemyConfig.SMIN
+       >> m_enemyConfig.SMAX
+       >> m_enemyConfig.OR
+       >> m_enemyConfig.OG
+       >> m_enemyConfig.OB
+       >> m_enemyConfig.OT
+       >> m_enemyConfig.VMIN
+       >> m_enemyConfig.VMAX
+       >> m_enemyConfig.L
+       >> m_enemyConfig.SI;
+    }
   }
 
   configFile.close();
@@ -112,7 +130,19 @@ void Game::spawnPlayer()
 
 void Game::spawnEnemy()
 {
-  m_entities.addEntity(Tag::Enemy);
+  auto enemy { m_entities.addEntity(Tag::Enemy) };
+
+  enemy->cShape = std::make_shared<CShape>(CShape(
+          m_enemyConfig.SR
+        , m_enemyConfig.VMAX //TODO: random number [VMIN, VMAX]
+        , sf::Color(255, 255, 255, 255) //TODO: random color
+        , sf::Color(m_enemyConfig.OR, m_enemyConfig.OG, m_enemyConfig.OB)
+        , m_enemyConfig.OT));
+
+  enemy->cTransform = std::make_shared<CTransform>(CTransform(
+          Vec2(200, 300) //TODO: random position
+        , Vec2(m_enemyConfig.SMAX, m_enemyConfig.SMAX) // TODO: random number [SMIN, SMAX]
+        , 8));
 }
 
 void Game::spawnBullet()
@@ -261,6 +291,13 @@ void Game::sRender()
 
 };
 
-void Game::sEnemySpawner() {};
+void Game::sEnemySpawner()
+{
+  if (m_currentFrame - m_lastEnemySpwanFrame > 3 || m_lastEnemySpwanFrame == 0)
+  {
+    spawnEnemy();
+    m_lastEnemySpwanFrame = m_currentFrame;
+  }
+};
 void Game::sCollision() {};
 
