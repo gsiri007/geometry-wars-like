@@ -8,7 +8,7 @@ Entity::Entity(size_t id, Tag tag)
 const size_t Entity::id() const
 {
   return m_id;
-};
+}
 
 const bool Entity::isAlive() const
 {
@@ -18,7 +18,7 @@ const bool Entity::isAlive() const
 const Tag Entity::tag() const
 {
   return m_tag;
-};
+}
 
 void Entity::destroy()
 {

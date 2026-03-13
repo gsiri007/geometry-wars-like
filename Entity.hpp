@@ -4,6 +4,10 @@
 
 enum class Tag {
   Default,
+  Player,
+  Enemy,
+  Bullet,
+  Special,
 };
 
 class Entity

@@ -1,6 +1,8 @@
 #include "EntityManager.hpp"
 #include <memory>
 
+EntityManager::EntityManager() {}
+
 std::shared_ptr<Entity> EntityManager::addEntity(Tag tag)
 {
   auto id { m_nextID++ };
@@ -8,22 +10,22 @@ std::shared_ptr<Entity> EntityManager::addEntity(Tag tag)
 
   m_buffer.push_back(e);
   return e;
-};
+}
 
 EntityVec & EntityManager::getEntities()
 {
   return m_entities;
-};
+}
 
 EntityVec & EntityManager::getEntities(Tag tag)
 {
   return m_entityMap.at(tag);
-};
+}
 
 const size_t EntityManager::getTotalEntities() const
 {
   return m_totalEntities;
-};
+}
 
 void EntityManager::update()
 {
@@ -43,4 +45,4 @@ void EntityManager::update()
     std::erase_if( pair.second
                  , [] (const std::shared_ptr<Entity> & e) { return !(e->m_alive); });
   }
-};
+}

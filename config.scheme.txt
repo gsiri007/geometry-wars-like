@@ -1,0 +1,3 @@
+Window W H F S
+FONT   F S R G B
+Player SR CR S FR FG FB OR OG OB OT V
