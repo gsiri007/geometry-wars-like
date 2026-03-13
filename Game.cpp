@@ -101,9 +101,9 @@ void Game::spawnPlayer()
         , sf::Color(m_playerConfig.OR, m_playerConfig.OG, m_playerConfig.OB)
         , m_playerConfig.OT));
 
-  auto size = m_window.getSize();
+  auto windowSize = m_window.getSize();
   m_player->cTransform = std::make_shared<CTransform>(CTransform(
-          Vec2(size.x / 2.0f, size.y / 2.0f)
+          Vec2(windowSize.x / 2.0f, windowSize.y / 2.0f)
         , Vec2(m_playerConfig.S, m_playerConfig.S)
         , 8));
 
@@ -134,23 +134,47 @@ void Game::sMovement()
     // user controlled entity (player)
     if (e->cInput)
     {
+
+      auto winodwSize = m_window.getSize();
+      auto radius     = e->cShape->circle.getRadius();
+
       if (e->cInput->up)
       {
         e->cTransform->position.y -= e->cTransform->velocity.y;
+
+        if (e->cTransform->position.y - radius <= 0)
+        {
+          e->cTransform->position.y += e->cShape->circle.getRadius();
+        }
       }
 
       if (e->cInput->down)
       {
         e->cTransform->position.y += e->cTransform->velocity.y;
+
+        if (e->cTransform->position.y + radius  >= winodwSize.y)
+        {
+          e->cTransform->position.y -= e->cShape->circle.getRadius();
+        }
       }
 
       if (e->cInput->left)
       {
         e->cTransform->position.x -= e->cTransform->velocity.x;
+
+        if (e->cTransform->position.x - radius <= 0)
+        {
+          e->cTransform->position.x += e->cShape->circle.getRadius();
+        }
       }
 
       if (e->cInput->right) {
         e->cTransform->position.x += e->cTransform->velocity.x;
+
+        if (e->cTransform->position.x + radius >= winodwSize.x)
+        {
+          e->cTransform->position.x -= e->cShape->circle.getRadius();
+        }
       }
     }
 
