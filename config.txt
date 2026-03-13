@@ -1,4 +1,4 @@
-Window 1280 720 60 0
+Window 960 1080 60 0
 Font ./fonts/font.ttf 16 255 255 255
 Player 32 32 5 0 0 255 0 255 0 4 8
 Enemy  32 32 3 3 255 255 255 2 3 8 90 60

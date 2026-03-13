@@ -39,6 +39,9 @@ class Game
   void spawnBullet();
   void spawnSpecialWeapon();
 
+  int  getRandomNumber(const int min, const int max);
+  void entityLogger(Tag tag);
+
 public:
   Game(const std::string & config);
   void run();

@@ -22,6 +22,7 @@ public:
   EntityVec &              getEntities();
   EntityVec &              getEntities(Tag tag);
   const size_t             getTotalEntities() const;
+  const size_t             getTotalEntities(Tag tag) const;
 
   void update();
 };

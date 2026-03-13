@@ -27,6 +27,18 @@ const size_t EntityManager::getTotalEntities() const
   return m_totalEntities;
 }
 
+const size_t EntityManager::getTotalEntities(Tag tag) const
+{
+  auto entities = m_entityMap.find(tag);
+
+  if (entities != m_entityMap.end())
+  {
+    return m_entityMap.at(tag).size();
+  }
+
+  return 0;
+}
+
 void EntityManager::update()
 {
 

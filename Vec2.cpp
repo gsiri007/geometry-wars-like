@@ -1,9 +1,9 @@
 #include <cmath>
 #include "Vec2.hpp"
 
-Vec2::Vec2(float xPos, float yPos)
-  : x(xPos)
-  , y(yPos)
+Vec2::Vec2(float x, float y)
+  : x(x)
+  , y(y)
 {}
 
 Vec2 Vec2::operator + (const Vec2 & rhs) const

@@ -6,7 +6,7 @@ public:
 
   Vec2();
 
-  Vec2(float xPos, float yPos);
+  Vec2(float x, float y);
 
   Vec2 operator + (const Vec2 & rhs) const;
 

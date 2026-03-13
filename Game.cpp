@@ -3,9 +3,12 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <cstddef>
 #include <cstdlib>
+#include <ctime>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -105,6 +108,8 @@ void Game::run()
     sUserInput();
     sRender();
 
+    entityLogger(Tag::Enemy);
+
     m_currentFrame++;
   }
 }
@@ -132,16 +137,36 @@ void Game::spawnEnemy()
 {
   auto enemy { m_entities.addEntity(Tag::Enemy) };
 
+  auto vertices  { getRandomNumber(m_enemyConfig.VMIN, m_enemyConfig.VMAX )};
+
+  std::map<size_t, sf::Color> colorMap {
+      { 0, sf::Color(255, 0, 0, 255) }
+    , { 1, sf::Color(0, 255, 0, 255) }
+    , { 2, sf::Color(0, 0, 255, 255) }
+  };
+
+  auto  colorKey  { getRandomNumber(0, 2) };
+  auto  color     { colorMap[colorKey] };
+
+  // TODO: implement bound checking to ensure enemy spawn within the window
+  auto posX  { getRandomNumber( m_enemyConfig.SR
+                              , m_window.getSize().x - m_enemyConfig.SR) };
+  auto posY  { getRandomNumber( m_enemyConfig.SR
+                              , m_window.getSize().y - m_enemyConfig.SR) };
+
+  auto speedX  { getRandomNumber( m_enemyConfig.SMIN, m_enemyConfig.SMAX) };
+  auto speedY  { getRandomNumber( m_enemyConfig.SMIN, m_enemyConfig.SMAX) };
+
   enemy->cShape = std::make_shared<CShape>(CShape(
           m_enemyConfig.SR
-        , m_enemyConfig.VMAX //TODO: random number [VMIN, VMAX]
-        , sf::Color(255, 255, 255, 255) //TODO: random color
+        , vertices
+        , color
         , sf::Color(m_enemyConfig.OR, m_enemyConfig.OG, m_enemyConfig.OB)
         , m_enemyConfig.OT));
 
   enemy->cTransform = std::make_shared<CTransform>(CTransform(
-          Vec2(200, 300) //TODO: random position
-        , Vec2(m_enemyConfig.SMAX, m_enemyConfig.SMAX) // TODO: random number [SMIN, SMAX]
+          Vec2(posX, posY)
+        , Vec2(speedX, speedY)
         , 8));
 }
 
@@ -155,6 +180,18 @@ void Game::spawnSpecialWeapon()
   m_entities.addEntity(Tag::Special);
 }
 
+int Game::getRandomNumber(const int min, const int max)
+{
+  std::srand(std::time(nullptr));
+  int randomNumber { std::rand() % (max - min + 1) };
+  return randomNumber;
+}
+
+void Game::entityLogger(Tag tag)
+{
+  auto totalEntities = m_entities.getTotalEntities(tag);
+  std::cout << 0 << ": " << totalEntities << std::endl;
+}
 
 void Game::sMovement()
 {
@@ -293,7 +330,7 @@ void Game::sRender()
 
 void Game::sEnemySpawner()
 {
-  if (m_currentFrame - m_lastEnemySpwanFrame > 3 || m_lastEnemySpwanFrame == 0)
+  if (m_currentFrame - m_lastEnemySpwanFrame > 180)
   {
     spawnEnemy();
     m_lastEnemySpwanFrame = m_currentFrame;
