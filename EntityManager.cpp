@@ -22,16 +22,16 @@ EntityVec & EntityManager::getEntities(Tag tag)
   return m_entityMap.at(tag);
 }
 
-const size_t EntityManager::getTotalEntities() const
+size_t EntityManager::getTotalEntities() const
 {
   return m_totalEntities;
 }
 
-const size_t EntityManager::getTotalEntities(Tag tag) const
+size_t EntityManager::getTotalEntities(Tag tag) const
 {
-  auto entities = m_entityMap.find(tag);
+  auto it = m_entityMap.find(tag);
 
-  if (entities != m_entityMap.end())
+  if (it != m_entityMap.end())
   {
     return m_entityMap.at(tag).size();
   }

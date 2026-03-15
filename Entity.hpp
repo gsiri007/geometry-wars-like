@@ -29,9 +29,9 @@ public:
   std::shared_ptr<CScore>     cScore;
   std::shared_ptr<CLifespan>  cLifespan;
 
-  const  size_t  id()       const;
-  const  bool    isAlive()  const;
-  const  Tag     tag()      const;
+  size_t  id()       const;
+  bool    isAlive()  const;
+  Tag     tag()      const;
 
   void destroy();
 };

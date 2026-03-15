@@ -19,11 +19,11 @@ Game::Game(const std::string & config)
 
 void Game::init(const std::string & config)
 {
-  std::ifstream configFile("config.txt");
+  std::ifstream configFile(config);
 
   if (!configFile.is_open())
   {
-    std::cout << "ERROR: config file missing." << '\n';
+    std::cerr << "ERROR: config file missing." << '\n';
     exit(1);
   }
 
@@ -330,7 +330,7 @@ void Game::sRender()
 
 void Game::sEnemySpawner()
 {
-  if (m_currentFrame - m_lastEnemySpwanFrame > 180)
+  if (m_currentFrame - m_lastEnemySpwanFrame > 60)
   {
     spawnEnemy();
     m_lastEnemySpwanFrame = m_currentFrame;

@@ -5,17 +5,17 @@ Entity::Entity(size_t id, Tag tag)
   , m_tag(tag)
 {}
 
-const size_t Entity::id() const
+size_t Entity::id() const
 {
   return m_id;
 }
 
-const bool Entity::isAlive() const
+bool Entity::isAlive() const
 {
   return m_alive;
 }
 
-const Tag Entity::tag() const
+Tag Entity::tag() const
 {
   return m_tag;
 }

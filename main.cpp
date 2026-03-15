@@ -3,7 +3,7 @@
 
 int main ()
 {
-  Game game("dummy");
+  Game game("config.txt");
   game.run();
 
   return EXIT_SUCCESS;
