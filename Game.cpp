@@ -48,7 +48,6 @@ void Game::init(const std::string & config)
       configFile >> path;
       configFile >> size;
 
-
       m_font = sf::Font(path);
     }
 
@@ -195,6 +194,8 @@ void Game::entityLogger(Tag tag)
 
 void Game::sMovement()
 {
+  auto windowSize = m_window.getSize();
+
   for (auto & e : m_entities.getEntities())
   {
 
@@ -202,8 +203,7 @@ void Game::sMovement()
     if (e->cInput)
     {
 
-      auto winodwSize = m_window.getSize();
-      auto radius     = e->cShape->circle.getRadius();
+      auto radius = e->cShape->circle.getRadius();
 
       if (e->cInput->up)
       {
@@ -219,7 +219,7 @@ void Game::sMovement()
       {
         e->cTransform->position.y += e->cTransform->velocity.y;
 
-        if (e->cTransform->position.y + radius  >= winodwSize.y)
+        if (e->cTransform->position.y + radius  >= windowSize.y)
         {
           e->cTransform->position.y -= e->cShape->circle.getRadius();
         }
@@ -238,15 +238,30 @@ void Game::sMovement()
       if (e->cInput->right) {
         e->cTransform->position.x += e->cTransform->velocity.x;
 
-        if (e->cTransform->position.x + radius >= winodwSize.x)
+        if (e->cTransform->position.x + radius >= windowSize.x)
         {
           e->cTransform->position.x -= e->cShape->circle.getRadius();
         }
       }
     }
 
-    // other moving entities (enemies)
-    //TODO:
+    if (!(e->cInput))
+    {
+      e->cTransform->position.x += e->cTransform->velocity.x;
+      e->cTransform->position.y += e->cTransform->velocity.y;
+
+      if (e->cTransform->position.x >= windowSize.x ||
+          e->cTransform->position.x <= 0)
+      {
+        e->cTransform->velocity.x *= -1;
+      }
+
+      if (e->cTransform->position.y >= windowSize.y ||
+          e->cTransform->position.y <= 0)
+      {
+        e->cTransform->velocity.y *= -1;
+      }
+    }
   }
 };
 
@@ -336,5 +351,5 @@ void Game::sEnemySpawner()
     m_lastEnemySpwanFrame = m_currentFrame;
   }
 };
-void Game::sCollision() {};
 
+void Game::sCollision() {};
