@@ -73,12 +73,12 @@ Vec2 & Vec2::scale(float sX, float sY)
 
 float Vec2::magnitude(void)
 {
-  return std::sqrtf((x * x) + (y * y));
+  return std::sqrt((x * x) + (y * y));
 }
 
 Vec2 & Vec2::normalize(void)
 {
-  float m { std::sqrtf((x * x) + (y * y)) };
+  float m { std::sqrt((x * x) + (y * y)) };
   *this /= m;
 
   return *this;

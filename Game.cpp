@@ -48,6 +48,7 @@ void Game::init(const std::string & config)
       configFile >> path;
       configFile >> size;
 
+
       m_font = sf::Font(path);
     }
 
@@ -88,7 +89,6 @@ void Game::init(const std::string & config)
   configFile.close();
 
 }
-
 void Game::setPaused(bool state)
 {
   m_paused = state;
