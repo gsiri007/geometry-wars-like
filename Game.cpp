@@ -1,7 +1,9 @@
 #include "Game.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <cstddef>
 #include <cstdlib>
 #include <ctime>
@@ -83,6 +85,23 @@ void Game::init(const std::string & config)
        >> m_enemyConfig.L
        >> m_enemyConfig.SI;
     }
+
+    if (entry == "Bullet")
+    {
+      configFile
+        >> m_bulletConfig.SR
+        >> m_bulletConfig.CR
+        >> m_bulletConfig.S
+        >> m_bulletConfig.FR
+        >> m_bulletConfig.FG
+        >> m_bulletConfig.FB
+        >> m_bulletConfig.OR
+        >> m_bulletConfig.OG
+        >> m_bulletConfig.OB
+        >> m_bulletConfig.OT
+        >> m_bulletConfig.V
+        >> m_bulletConfig.L;
+    }
   }
 
   configFile.close();
@@ -106,7 +125,7 @@ void Game::run()
     sUserInput();
     sRender();
 
-    entityLogger(Tag::Enemy);
+    // entityLogger(Tag::Enemy);
 
     m_currentFrame++;
   }
@@ -169,9 +188,21 @@ void Game::spawnEnemy()
         , 8));
 }
 
-void Game::spawnBullet()
+void Game::spawnBullet(Vec2 & target)
 {
-  m_entities.addEntity(Tag::Bullet);
+  auto bullet { m_entities.addEntity(Tag::Bullet) };
+
+  bullet->cShape = std::make_shared<CShape>(CShape(
+           m_bulletConfig.SR
+         , m_bulletConfig.V
+         , sf::Color(m_bulletConfig.FR, m_bulletConfig.FG, m_bulletConfig.FB)
+         , sf::Color(m_bulletConfig.OR, m_bulletConfig.OG, m_bulletConfig.OB)
+         , m_bulletConfig.OT));
+
+  bullet->cTransform = std::make_shared<CTransform>(CTransform(
+           target
+         , Vec2(0, 0)
+         , 0));
 }
 
 void Game::spawnSpecialWeapon()
@@ -315,6 +346,15 @@ void Game::sUserInput()
         default:
           break;
       }
+    }
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+    {
+      auto mousePosition  { sf::Mouse::getPosition(m_window) };
+      Vec2 target         { static_cast<float>(mousePosition.x),
+                            static_cast<float>(mousePosition.y) };
+
+      spawnBullet(target);
     }
   }
 

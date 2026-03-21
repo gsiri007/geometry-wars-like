@@ -36,7 +36,7 @@ class Game
 
   void spawnPlayer();
   void spawnEnemy();
-  void spawnBullet();
+  void spawnBullet(Vec2 & target);
   void spawnSpecialWeapon();
 
   int  getRandomNumber(const int min, const int max);
