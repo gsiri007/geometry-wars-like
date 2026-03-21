@@ -135,7 +135,7 @@ void Game::spawnPlayer()
 {
   m_player = m_entities.addEntity(Tag::Player);
 
-  m_player->cShape = std::make_shared<CShape>(CShape(
+  m_player->cShape = std::make_unique<CShape>(CShape(
           m_playerConfig.SR
         , m_playerConfig.V
         , sf::Color(m_playerConfig.FR, m_playerConfig.FG, m_playerConfig.FB)
@@ -144,12 +144,12 @@ void Game::spawnPlayer()
 
   auto windowSize = m_window.getSize();
 
-  m_player->cTransform = std::make_shared<CTransform>(CTransform(
+  m_player->cTransform = std::make_unique<CTransform>(CTransform(
           Vec2(windowSize.x / 2.0f, windowSize.y / 2.0f)
         , Vec2(m_playerConfig.S, m_playerConfig.S)
         , 8));
 
-  m_player->cInput = std::make_shared<CInput>();
+  m_player->cInput = std::make_unique<CInput>();
 }
 
 void Game::spawnEnemy()
@@ -175,14 +175,14 @@ void Game::spawnEnemy()
   auto speedX  { getRandomNumber(m_enemyConfig.SMIN, m_enemyConfig.SMAX) };
   auto speedY  { getRandomNumber(m_enemyConfig.SMIN, m_enemyConfig.SMAX) };
 
-  enemy->cShape = std::make_shared<CShape>(CShape(
+  enemy->cShape = std::make_unique<CShape>(CShape(
           m_enemyConfig.SR
         , vertices
         , color
         , sf::Color(m_enemyConfig.OR, m_enemyConfig.OG, m_enemyConfig.OB)
         , m_enemyConfig.OT));
 
-  enemy->cTransform = std::make_shared<CTransform>(CTransform(
+  enemy->cTransform = std::make_unique<CTransform>(CTransform(
           Vec2(posX, posY)
         , Vec2(speedX, speedY)
         , 8));
@@ -192,14 +192,14 @@ void Game::spawnBullet(Vec2 & target)
 {
   auto bullet { m_entities.addEntity(Tag::Bullet) };
 
-  bullet->cShape = std::make_shared<CShape>(CShape(
+  bullet->cShape = std::make_unique<CShape>(CShape(
            m_bulletConfig.SR
          , m_bulletConfig.V
          , sf::Color(m_bulletConfig.FR, m_bulletConfig.FG, m_bulletConfig.FB)
          , sf::Color(m_bulletConfig.OR, m_bulletConfig.OG, m_bulletConfig.OB)
          , m_bulletConfig.OT));
 
-  bullet->cTransform = std::make_shared<CTransform>(CTransform(
+  bullet->cTransform = std::make_unique<CTransform>(CTransform(
            target
          , Vec2(0, 0)
          , 0));

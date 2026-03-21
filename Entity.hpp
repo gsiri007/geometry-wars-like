@@ -22,12 +22,12 @@ class Entity
 
 public:
   // components
-  std::shared_ptr<CTransform> cTransform;
-  std::shared_ptr<CShape>     cShape;
-  std::shared_ptr<CCollision> cCollision;
-  std::shared_ptr<CInput>     cInput;
-  std::shared_ptr<CScore>     cScore;
-  std::shared_ptr<CLifespan>  cLifespan;
+  std::unique_ptr<CTransform> cTransform;
+  std::unique_ptr<CShape>     cShape;
+  std::unique_ptr<CCollision> cCollision;
+  std::unique_ptr<CInput>     cInput;
+  std::unique_ptr<CScore>     cScore;
+  std::unique_ptr<CLifespan>  cLifespan;
 
   size_t  id()       const;
   bool    isAlive()  const;
