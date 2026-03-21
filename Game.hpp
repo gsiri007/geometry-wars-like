@@ -16,7 +16,7 @@ class Game
   EntityManager     m_entities;
   size_t            m_score;
   size_t            m_currentFrame         { 0 };
-  size_t            m_lastEnemySpwanFrame  { 0 };
+  size_t            m_lastEnemySpawnFrame  { 0 };
   bool              m_paused               { false };
   bool              m_running              { true };
 

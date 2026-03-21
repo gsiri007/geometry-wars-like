@@ -116,7 +116,8 @@ void Game::run()
 {
   spawnPlayer();
 
-  while (m_running) {
+  while (m_running)
+  {
     m_entities.update();
 
     sEnemySpawner();
@@ -158,7 +159,8 @@ void Game::spawnEnemy()
 
   auto vertices  { getRandomNumber(m_enemyConfig.VMIN, m_enemyConfig.VMAX) };
 
-  std::map<size_t, sf::Color> colorMap {
+  std::map<size_t, sf::Color> colorMap
+  {
       { 0, sf::Color(255, 0, 0, 255) }
     , { 1, sf::Color(0, 255, 0, 255) }
     , { 2, sf::Color(0, 0, 255, 255) }
@@ -199,9 +201,13 @@ void Game::spawnBullet(Vec2 & target)
          , sf::Color(m_bulletConfig.OR, m_bulletConfig.OG, m_bulletConfig.OB)
          , m_bulletConfig.OT));
 
+
+  Vec2 velocity { target.x - m_player->cTransform->position.x
+                , target.y - m_player->cTransform->position.y };
+
   bullet->cTransform = std::make_unique<CTransform>(CTransform(
-           target
-         , Vec2(0, 0)
+           m_player->cTransform->position
+         , velocity.normalize() *= m_bulletConfig.S
          , 0));
 }
 
@@ -385,10 +391,10 @@ void Game::sRender()
 
 void Game::sEnemySpawner()
 {
-  if (m_currentFrame - m_lastEnemySpwanFrame > 60)
+  if (m_currentFrame - m_lastEnemySpawnFrame > 60)
   {
     spawnEnemy();
-    m_lastEnemySpwanFrame = m_currentFrame;
+    m_lastEnemySpawnFrame = m_currentFrame;
   }
 };
 
