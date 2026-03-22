@@ -61,9 +61,9 @@ public:
   size_t initialFTL   { 0 };
   size_t remainingFTL { 0 };
 
-  CLifespan(size_t framesToLive)
-    : initialFTL(framesToLive)
-    , remainingFTL(framesToLive)
+  CLifespan(size_t FTL)
+    : initialFTL(FTL)
+    , remainingFTL(FTL)
   {}
 };
 

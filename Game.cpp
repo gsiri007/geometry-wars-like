@@ -120,6 +120,7 @@ void Game::run()
   {
     m_entities.update();
 
+    sLifespan();
     sEnemySpawner();
     sMovement();
     sCollision();
@@ -205,10 +206,15 @@ void Game::spawnBullet(Vec2 & target)
   Vec2 velocity { target.x - m_player->cTransform->position.x
                 , target.y - m_player->cTransform->position.y };
 
+  velocity.normalize() *= m_bulletConfig.S;
+
   bullet->cTransform = std::make_unique<CTransform>(CTransform(
            m_player->cTransform->position
-         , velocity.normalize() *= m_bulletConfig.S
+         , velocity
          , 0));
+
+  bullet->cLifespan = std::make_unique<CLifespan>(CLifespan(
+          m_bulletConfig.L));
 }
 
 void Game::spawnSpecialWeapon()
@@ -316,20 +322,20 @@ void Game::sUserInput()
 
       switch (keyPressed->scancode)
       {
-        case sf::Keyboard::Scancode::W :
-          m_player->cInput->up = true;
-          break;
-        case sf::Keyboard::Scancode::A :
-          m_player->cInput->left = true;
-          break;
-        case sf::Keyboard::Scancode::S :
-          m_player->cInput->down = true;
-          break;
-        case sf::Keyboard::Scancode::D :
-          m_player->cInput->right = true;
-          break;
-        default:
-          break;
+      case sf::Keyboard::Scancode::W :
+        m_player->cInput->up = true;
+        break;
+      case sf::Keyboard::Scancode::A :
+        m_player->cInput->left = true;
+        break;
+      case sf::Keyboard::Scancode::S :
+        m_player->cInput->down = true;
+        break;
+      case sf::Keyboard::Scancode::D :
+        m_player->cInput->right = true;
+        break;
+      default:
+        break;
       }
     }
 
@@ -337,20 +343,20 @@ void Game::sUserInput()
     {
       switch (keyReleased->scancode)
       {
-        case sf::Keyboard::Scancode::W :
-          m_player->cInput->up = false;
-          break;
-        case sf::Keyboard::Scancode::A :
-          m_player->cInput->left = false;
-          break;
-        case sf::Keyboard::Scancode::S :
-          m_player->cInput->down = false;
-          break;
-        case sf::Keyboard::Scancode::D :
-          m_player->cInput->right = false;
-          break;
-        default:
-          break;
+      case sf::Keyboard::Scancode::W :
+        m_player->cInput->up = false;
+        break;
+      case sf::Keyboard::Scancode::A :
+        m_player->cInput->left = false;
+        break;
+      case sf::Keyboard::Scancode::S :
+        m_player->cInput->down = false;
+        break;
+      case sf::Keyboard::Scancode::D :
+        m_player->cInput->right = false;
+        break;
+      default:
+        break;
       }
     }
 
@@ -366,7 +372,23 @@ void Game::sUserInput()
 
 };
 
-void Game::sLifespan() {};
+void Game::sLifespan()
+{
+  auto entities = m_entities.getEntities();
+
+  for (auto entity : entities)
+  {
+    if (entity->cLifespan)
+    {
+      entity->cLifespan->remainingFTL -= 1;
+
+      if (entity->cLifespan->remainingFTL == 0)
+      {
+        entity->destroy();
+      }
+    }
+  }
+};
 
 void Game::sRender()
 {
