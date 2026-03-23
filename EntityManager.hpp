@@ -21,8 +21,8 @@ public:
   std::shared_ptr<Entity>  addEntity(Tag tag);
   EntityVec &              getEntities();
   EntityVec &              getEntities(Tag tag);
-  size_t             getTotalEntities() const;
-  size_t             getTotalEntities(Tag tag) const;
+  size_t                   getTotalEntities()        const;
+  size_t                   getTotalEntities(Tag tag) const;
 
   void update();
 };

@@ -189,6 +189,9 @@ void Game::spawnEnemy()
           Vec2(posX, posY)
         , Vec2(speedX, speedY)
         , 8));
+
+  enemy->cCollision = std::make_unique<CCollision>(CCollision(
+         m_enemyConfig.CR));
 }
 
 void Game::spawnBullet(Vec2 & target)
@@ -215,6 +218,9 @@ void Game::spawnBullet(Vec2 & target)
 
   bullet->cLifespan = std::make_unique<CLifespan>(CLifespan(
           m_bulletConfig.L));
+
+  bullet->cCollision = std::make_unique<CCollision>(CCollision(
+         m_bulletConfig.CR));
 }
 
 void Game::spawnSpecialWeapon()
@@ -420,4 +426,26 @@ void Game::sEnemySpawner()
   }
 };
 
-void Game::sCollision() {};
+void Game::sCollision()
+{
+  for (auto & bullet : m_entities.getEntities(Tag::Bullet))
+  {
+    auto bulletX { bullet->cTransform->position.x };
+    auto bulletY { bullet->cTransform->position.y };
+
+    for (auto & enemy : m_entities.getEntities(Tag::Enemy))
+    {
+
+      auto enemyX { enemy->cTransform->position.x };
+      auto enemyY { enemy->cTransform->position.y };
+
+      auto distance { (bulletX - enemyX) * (bulletX - enemyX)
+                    + (bulletY - enemyY) * (bulletY - enemyY) };
+
+      if (distance <= m_enemyConfig.CR * m_enemyConfig.CR)
+      {
+        enemy->destroy();
+      }
+    }
+  }
+};

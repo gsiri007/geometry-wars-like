@@ -19,7 +19,7 @@ EntityVec & EntityManager::getEntities()
 
 EntityVec & EntityManager::getEntities(Tag tag)
 {
-  return m_entityMap.at(tag);
+  return m_entityMap[tag];
 }
 
 size_t EntityManager::getTotalEntities() const
