@@ -442,7 +442,10 @@ void Game::sCollision()
       auto distance { (bulletX - enemyX) * (bulletX - enemyX)
                     + (bulletY - enemyY) * (bulletY - enemyY) };
 
-      if (distance <= m_enemyConfig.CR * m_enemyConfig.CR)
+      auto collisionDistance { (m_enemyConfig.CR + m_bulletConfig.CR)
+                             * (m_enemyConfig.CR + m_bulletConfig.CR) };
+
+      if (distance <= collisionDistance)
       {
         enemy->destroy();
       }
