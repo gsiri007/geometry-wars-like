@@ -196,6 +196,14 @@ void Game::spawnEnemy()
 
 void Game::spawnBullet(Vec2 & target)
 {
+
+  if (m_currentFrame - m_lastBulletSpawnFrame < 60)
+  {
+    return;
+  }
+
+  m_lastBulletSpawnFrame = m_currentFrame;
+
   auto bullet { m_entities.addEntity(Tag::Bullet) };
 
   bullet->cShape = std::make_unique<CShape>(CShape(
