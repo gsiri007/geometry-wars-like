@@ -30,7 +30,9 @@ public:
 
   Vec2 & scale(float sX, float sY);
 
-  float magnitude(void);
+  float magnitude();
 
-  Vec2 & normalize(void);
+  Vec2 & normalize();
+
+  Vec2 & rotate(float angle);
 };

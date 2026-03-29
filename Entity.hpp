@@ -6,6 +6,7 @@ enum class Tag {
   Default,
   Player,
   Enemy,
+  Particle,
   Bullet,
   Special,
 };

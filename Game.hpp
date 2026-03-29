@@ -32,8 +32,11 @@ class Game
 
   void sMovement();
   void sUserInput();
-  void sLifespan(); void sRender(); void sEnemySpawner();
+  void sLifespan();
+  void sRender();
+  void sEnemySpawner();
   void sCollision();
+  void sParticles();
 
   void spawnPlayer();
   void spawnEnemy();

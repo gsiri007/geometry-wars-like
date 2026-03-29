@@ -1,9 +1,7 @@
 #include "Game.hpp"
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Color.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/Window/Mouse.hpp>
 #include <cstddef>
 #include <cstdlib>
 #include <ctime>
@@ -12,6 +10,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 
 Game::Game(const std::string & config)
@@ -124,6 +123,7 @@ void Game::run()
     sEnemySpawner();
     sMovement();
     sCollision();
+    sParticles();
     sUserInput();
     sRender();
 
@@ -320,7 +320,7 @@ void Game::sMovement()
       }
     }
   }
-};
+}
 
 void Game::sUserInput()
 {
@@ -384,7 +384,7 @@ void Game::sUserInput()
     }
   }
 
-};
+}
 
 void Game::sLifespan()
 {
@@ -402,7 +402,7 @@ void Game::sLifespan()
       }
     }
   }
-};
+}
 
 void Game::sRender()
 {
@@ -432,7 +432,7 @@ void Game::sEnemySpawner()
     spawnEnemy();
     m_lastEnemySpawnFrame = m_currentFrame;
   }
-};
+}
 
 void Game::sCollision()
 {
@@ -459,4 +459,47 @@ void Game::sCollision()
       }
     }
   }
-};
+}
+
+void Game::sParticles()
+{
+  for (auto & enemy : m_entities.getEntities(Tag::Enemy))
+  {
+    if (!(enemy->isAlive()))
+    {
+      auto fillcolor    { enemy->cShape->circle.getFillColor() };
+      auto outlineColor { enemy->cShape->circle.getOutlineColor() };
+
+      //TODO: read particle radius from config
+      auto particleRadius    { enemy->cShape->circle.getRadius() * 0.25 };
+      auto particleVertices  { enemy->cShape->circle.getPointCount() };
+      auto particlePosition  { enemy->cTransform->position };
+
+      sf::Color particleFillColor    { fillcolor.r, fillcolor.g, fillcolor.b, 100};
+      sf::Color particleOutlineColor { outlineColor.r, outlineColor.g, outlineColor.b, 100};
+
+      auto velocity { enemy->cTransform->velocity };
+
+      for (auto angle { 0 }; angle <= 360; angle += 360 / particleVertices)
+      {
+        auto particle { m_entities.addEntity(Tag::Particle) };
+
+        particle->cShape = std::make_unique<CShape>(CShape(
+                   particleRadius
+                 , particleVertices
+                 , particleFillColor
+                 , particleOutlineColor
+                 , 0));
+
+        particle->cTransform = std::make_unique<CTransform>(CTransform(
+                   particlePosition
+                 , velocity.rotate(angle)
+                 , 0));
+
+        //TODO: read lifespan from config
+        particle->cLifespan = std::make_unique<CLifespan>(CLifespan(30));
+      }
+    }
+  }
+}
+

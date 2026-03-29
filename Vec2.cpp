@@ -71,15 +71,28 @@ Vec2 & Vec2::scale(float sX, float sY)
   return *this;
 }
 
-float Vec2::magnitude(void)
+float Vec2::magnitude()
 {
   return std::sqrt((x * x) + (y * y));
 }
 
-Vec2 & Vec2::normalize(void)
+Vec2 & Vec2::normalize()
 {
   float m { std::sqrt((x * x) + (y * y)) };
   *this /= m;
+
+  return *this;
+}
+
+Vec2 & Vec2::rotate(float angle)
+{
+  float radians = angle * (M_PI / 180);
+
+  float xCoord =  x;
+  float yCoord =  y;
+
+  x = xCoord * std::cos(radians) - yCoord * std::sin(radians);
+  y = xCoord * std::sin(radians) + yCoord * std::cos(radians);
 
   return *this;
 }
