@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <cstddef>
 #include <cstdlib>
 #include <ctime>
@@ -106,10 +107,6 @@ void Game::init(const std::string & config)
   configFile.close();
 
 }
-void Game::setPaused(bool state)
-{
-  m_paused = state;
-}
 
 void Game::run()
 {
@@ -117,13 +114,16 @@ void Game::run()
 
   while (m_running)
   {
-    m_entities.update();
+    if (!m_paused)
+    {
+      m_entities.update();
+      sLifespan();
+      sEnemySpawner();
+      sMovement();
+      sCollision();
+      sParticles();
+    }
 
-    sLifespan();
-    sEnemySpawner();
-    sMovement();
-    sCollision();
-    sParticles();
     sUserInput();
     sRender();
 
@@ -376,17 +376,21 @@ void Game::sUserInput()
         break;
       }
     }
-
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-    {
-      auto mousePosition  { sf::Mouse::getPosition(m_window) };
-      Vec2 target         { static_cast<float>(mousePosition.x),
-                            static_cast<float>(mousePosition.y) };
-
-      spawnBullet(target);
-    }
   }
 
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+  {
+    m_paused = !m_paused;
+  }
+
+  if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+  {
+    auto mousePosition  { sf::Mouse::getPosition(m_window) };
+    Vec2 target         { static_cast<float>(mousePosition.x),
+                          static_cast<float>(mousePosition.y) };
+
+    spawnBullet(target);
+  }
 }
 
 void Game::sLifespan()

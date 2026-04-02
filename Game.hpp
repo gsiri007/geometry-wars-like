@@ -28,7 +28,6 @@ class Game
   std::shared_ptr<Entity> m_player;
 
   void init(const std::string & config);
-  void setPaused(bool state);
 
   void sMovement();
   void sUserInput();
