@@ -152,6 +152,9 @@ void Game::spawnPlayer()
         , 8));
 
   m_player->cInput = std::make_unique<CInput>();
+
+  m_player->cCollision = std::make_unique<CCollision>(CCollision(
+          m_playerConfig.CR));
 }
 
 void Game::spawnEnemy()
@@ -436,6 +439,7 @@ void Game::sEnemySpawner()
 
 void Game::sCollision()
 {
+  // bullet - enemy collision
   for (auto & bullet : m_entities.getEntities(Tag::Bullet))
   {
     auto bulletX { bullet->cTransform->position.x };
@@ -459,6 +463,28 @@ void Game::sCollision()
       }
     }
   }
+
+  // enemy - player collision
+  for (auto & enemy : m_entities.getEntities(Tag::Enemy))
+  {
+    auto enemyX { enemy->cTransform->position.x };
+    auto enemyY { enemy->cTransform->position.y };
+
+    auto playerX { m_player->cTransform->position.x };
+    auto playerY { m_player->cTransform->position.y };
+
+    auto distance { (playerX - enemyX) * (playerX - enemyX)
+                  + (playerY - enemyY) * (playerY - enemyY) };
+
+    auto collisionDistance { (m_enemyConfig.CR + m_playerConfig.CR)
+                            * (m_enemyConfig.CR + m_playerConfig.CR) };
+
+    if (distance <= collisionDistance)
+    {
+      auto windowSize { m_window.getSize() };
+      m_player->cTransform->position = Vec2(windowSize.x / 2.0f, windowSize.y / 2.0f);
+    }
+  }
 }
 
 void Game::sParticles()
@@ -470,7 +496,6 @@ void Game::sParticles()
       auto fillcolor    { enemy->cShape->circle.getFillColor() };
       auto outlineColor { enemy->cShape->circle.getOutlineColor() };
 
-      //TODO: read particle radius from config
       auto particleRadius    { enemy->cShape->circle.getRadius() * 0.25 };
       auto particleVertices  { enemy->cShape->circle.getPointCount() };
       auto particlePosition  { enemy->cTransform->position };
@@ -496,7 +521,6 @@ void Game::sParticles()
                  , velocity.rotate(angle)
                  , 0));
 
-        //TODO: read lifespan from config
         particle->cLifespan = std::make_unique<CLifespan>(CLifespan(30));
       }
     }
