@@ -1,5 +1,5 @@
 # Installation
-## Step 1 : Dependancies
+## Step 1 : Dependencies
 - sudo apt update
 - sudo apt install \
     libxrandr-dev \
