@@ -5,22 +5,22 @@ Entity::Entity(size_t id, Tag tag)
   , m_tag(tag)
 {}
 
-size_t Entity::id() const
+inline size_t Entity::id() const
 {
   return m_id;
 }
 
-bool Entity::isAlive() const
+inline bool Entity::isAlive() const
 {
   return m_alive;
 }
 
-Tag Entity::tag() const
+inline Tag Entity::tag() const
 {
   return m_tag;
 }
 
-void Entity::destroy()
+inline void Entity::destroy()
 {
   m_alive = false;
 }
